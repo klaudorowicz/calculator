@@ -9,58 +9,54 @@
   <link rel="stylesheet" href="css/fontello.css">
 </head>
 <body>
-  <head>
-    <h1>
+  <header>
+    <div class="title">
       eCalculator
-    </h1>
-  </head>
+    </div>
+  </header>
 
   <main>
     <div class="calculator">
 
       <div class="display">
-        <output ></output>
+        <output id="history" type="text" value="">history</output>
+        <output id="display" type="text" value="">I LOVE MATH #404</output>
       </div>
 
       <div class="buttons">
-        <div class="row">
           <button id="operator"> ! </button>
           <button id="helper"> CE </button>
           <button id="helper"> C </button>
-          <button id="helper"> Delete </button>
-        </div>
-        <div class="row">
+          <button id="helper"> Del </button>
           <button id="number"> ^ </button>
           <button id="number"> x%y </button>
           <button id="number"> * </button>
           <button id="operator"> / </button>
-        </div>
-        <div class="row">
           <button id="number"> 7 </button>
           <button id="number"> 8 </button>
           <button id="number"> 9 </button>
           <button id="operator"> - </button>
-        </div>
-        <div class="row">
           <button id="number"> 4 </button>
           <button id="number"> 5 </button>
           <button id="number"> 6 </button>
           <button id="operator"> + </button>
-        </div>
-        <div class="row">
           <button id="number"> 1 </button>
           <button id="number"> 2 </button>
           <button id="number"> 3 </button>
           <button id="result"> = </button>
-        </div>
-        <div class="row">
           <button id="operator"> +/- </button>
           <button id="number"> 0 </button>
           <button id="number"> . </button>
-          <div class="empty" name="for="></div>
-        </div>
       </div>
 
+      <footer>
+        <div class="footer">
+            Copyright &copy &nbsp  
+            <a href="https://github.com/klaudorowicz" target="_blank" rel="noreferrer noopener">
+              klaudorowicz <i class="icon-github-circled"></i>
+            </a>
+        </div>
+      </footer>
 
 
     </div>

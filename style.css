@@ -1,0 +1,112 @@
+body {
+  padding: 0;
+  margin: 0;
+  background-color: hsla(170, 50%, 30%, 0.2);
+}
+
+@font-face {
+  font-family: 'Bellota Text';
+  src: url(font/BellotaText-Regular.ttf) format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Pixel Technology';
+  src: url(font/VCR_OSD_MONO_1.001.ttf) format('truetype');
+  font-weight: normal;
+}
+
+* {
+  font-family: 'Bellota Text', 'Roboto', sans-serif;
+  /* text-shadow: 1px 1px 1px #6d6d6d; */
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  display: inline-block;
+}
+
+i {
+  pointer-events: none
+}
+
+.title {
+  text-align: center;
+  font-size: 60px;
+  margin-top: 80px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-shadow: none;
+  background: -webkit-linear-gradient(-120deg, rgb(0, 0, 0) 25%,  rgb(98, 126, 121) 35%, rgb(0, 0, 0) 45%, rgb(22, 167, 154) 65%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(6px 6px 3px #a8a8a8);
+  /* user-select: none; */
+}
+
+
+.calculator {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 100px;
+}
+
+.display {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 10px;
+  width: 280px;
+  margin-bottom: 10px;
+  background-color: rgb(73, 184, 184);
+}
+
+output {
+  font-family: 'Pixel Technology';
+  font-size: 26px;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 65px);
+  grid-template-rows: repeat(6, 65px);
+  gap: 3px;
+}
+#result {
+  /* grid-area: 5 / 4 / 7 / 5; */
+  grid-column: 4 / 5;
+  grid-row: 5 / 7; 
+}
+
+button {
+  font-size: 24px;
+}
+
+
+
+
+
+
+
+
+
+
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  padding: 10px;
+  background: linear-gradient( rgb(19, 134, 125), rgb(22, 167, 154) 50%, rgb(29, 211, 196) 100%);
+  box-shadow: 0px -3px 20px rgb(0, 0, 0);
+  color: black;
+  user-select: none;
+}
