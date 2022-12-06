@@ -67,13 +67,16 @@ i {
   background-color: rgb(73, 184, 184);
 }
 
-output,
-output div {
+.display div {
   font-family: 'Pixel Technology';
   font-size: 26px;
   /* overflow-x: auto; */
   max-width: 260px;
   float: right;
+}
+
+.display #histories {
+  font-size: 20px;
 }
 
 .buttons {
