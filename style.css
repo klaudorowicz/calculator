@@ -62,13 +62,18 @@ i {
   align-items: flex-end;
   padding: 10px;
   width: 280px;
+  height: 72px;
   margin-bottom: 10px;
   background-color: rgb(73, 184, 184);
 }
 
-output {
+output,
+output div {
   font-family: 'Pixel Technology';
   font-size: 26px;
+  /* overflow-x: auto; */
+  max-width: 260px;
+  float: right;
 }
 
 .buttons {

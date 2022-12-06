@@ -1,5 +1,14 @@
 
 
+const buttons = document.querySelectorAll('button');
+const numbers = document.querySelectorAll('#number');
+const operators = document.querySelectorAll('#operator');
+const helpers = document.querySelectorAll('#helper');
+const result = document.querySelector('#result');
+const display = document.querySelector('#display');
+const histories = document.querySelector('#history');
+let operator = 'operatorAdd';
+
 // Operate functions
 
 const add = (...args) => {
@@ -64,33 +73,102 @@ const factorial = (number) => {
   }
 }
 
-let firstNumber = 10;
-let secondNumber = 4;
-let operator = 'operatorAdd';
 
-
-function operate(firstNumber, secondNumber, operator) {
+function operate(firstNumber, operator, secondNumber) {
+  firstNumber = Number(firstNumber);
+  secondNumber = Number(secondNumber);
   switch (true) {
-    case (operator === 'operatorAdd'):
+    case (operator === '+'):
       return add (firstNumber, secondNumber);
-      break;
-    case (operator === 'operatorSubtract'):
+    case (operator === '-'):
       return subtract (firstNumber, secondNumber);
-      break;
-    case (operator === 'operatorMultiply'):
+    case (operator === '*'):
       return multiply (firstNumber, secondNumber);
-      break;
-    case (operator === 'operatorDivide'):
+    case (operator === '/'):
       return divide (firstNumber, secondNumber);
-      break;
-    case (operator === 'operatorPower'):
+    case (operator === '^'):
       return power (firstNumber, secondNumber);
-      break;
-    case (operator === 'operatorRemainder'):
+    case (operator === '%'):
       return remainder (firstNumber, secondNumber);
-      break;
-    case (operator === 'operatorFactorial'):
+    case (operator === '!'):
       return factorial (firstNumber);
-      break;
   }
 }
+
+let rememberPreviousNumber = '';
+let selectOperator = '';
+let solution = '';
+let resetDisplay = false;
+let lastWasOperator = false;
+
+
+buttons.forEach( (button) => {
+  button.addEventListener('click', (e) => {
+
+    if (lastWasOperator) removeAllChild(display);
+
+    if (rememberPreviousNumber && e.target.id === 'number') clickSecondNumber(e.target);
+    else if (e.target.id === 'number') clickFirstNumber(e.target);
+
+    if (e.target.id === 'operator') clickOperator(e.target);
+
+    if (e.target.id === 'result') {
+      solution = operate(firstNumber, selectOperator, secondNumber);
+      afterSolution(solution);
+      rememberPreviousNumber = '';
+    }
+
+    if (e.target.id === 'helper') {
+      if (e.target.value === "CE") clearContent(display);
+      if (e.target.value === "C") clearAll(display);
+    }
+  })
+})
+
+function afterSolution(solution) {
+  clearAll(display);
+  display.textContent = solution;
+  firstNumber = solution;
+}
+
+
+function clickFirstNumber(number) {
+  const displayText = document.createTextNode(number.value);
+  display.appendChild(displayText);
+  firstNumber = display.value;
+  lastWasOperator = false;
+}
+
+function clickSecondNumber(number) {
+  const displayText = document.createTextNode(number.value);
+  display.appendChild(displayText);
+  secondNumber = display.value;
+  lastWasOperator = false;
+}
+
+function clickOperator(operator) {
+  rememberPreviousNumber = firstNumber;
+  display.textContent = operator.value;
+  lastWasOperator = true;
+  selectOperator = operator.value; 
+}
+
+function removeAllChild(parent) {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  };
+};
+
+function clearContent(parent) {
+  parent.textContent = '';
+}
+
+function clearAll(parent) {
+  parent.textContent = '';
+  firstNumber = '';
+  secondNumber = '';
+  selectOperator = '';
+}
+
+
+
