@@ -70,37 +70,101 @@ const factorial = (number) => {
 const buttons = document.querySelectorAll('button');
 const numbers = document.querySelectorAll('#number');
 const operators = document.querySelectorAll('#operator');
+const operatorsSolo = document.querySelectorAll('#operatorSolo');
 const helpers = document.querySelectorAll('#helper');
 const result = document.querySelector('#result');
+const dot = document.querySelector('#dot');
 const display = document.querySelector('#display');
 const histories = document.querySelector('#histories');
 let operator = 'operatorAdd';
 let rememberPreviousNumber = '';
 let selectOperator = null;
 let resetDisplay = false;
+let numAfterDecimal = 0;
 
 
-function operate(firstNumber, operator, secondNumber) {
+function operate(firstNumber, operator, ...secondNumber) {
+
   firstNumber = Number(firstNumber);
+  let afterDecimal1 = afterDecimal(firstNumber);
   secondNumber = Number(secondNumber);
+  let afterDecimal2 = afterDecimal(secondNumber);
+
+  afterDecimal1 > afterDecimal2 ? 
+    numAfterDecimal = afterDecimal1 : 
+      numAfterDecimal = afterDecimal2
+
+  let multiplyNum = 10**numAfterDecimal;
+  firstNumber = calculateToInteger(firstNumber, multiplyNum);
+  secondNumber = calculateToInteger(secondNumber, multiplyNum);
+  console.log(firstNumber);
+  console.log(secondNumber);
+
+
+  let result = 0;
+  let dividedNum = 0;
+
   switch (true) {
     case (operator === '+'):
-      return add (firstNumber, secondNumber);
+
+      dividedNum = 10**numAfterDecimal;
+      result = add (firstNumber, secondNumber);
+      result = calculateFromInteger(result, dividedNum);
+
+      numAfterDecimal = 0;
+      return result;
+
     case (operator === '-'):
-      return subtract (firstNumber, secondNumber);
+
+      dividedNum = 10**numAfterDecimal;
+      result = subtract (firstNumber, secondNumber);
+      result = calculateFromInteger(result, dividedNum);
+      return result;
+
     case (operator === '*'):
-      return multiply (firstNumber, secondNumber);
+
+      dividedNum = 10**(2*numAfterDecimal);
+      result = multiply (firstNumber, secondNumber);
+      result = calculateFromInteger(result, dividedNum);
+      return result;
+
     case (operator === '/'):
       return divide (firstNumber, secondNumber);
+
     case (operator === '^'):
-      return power (firstNumber, secondNumber);
+
+      firstNumber = firstNumber/(10**numAfterDecimal);
+      secondNumber = secondNumber/(10**numAfterDecimal);
+      result = power (firstNumber, secondNumber);
+      return result;
+
     case (operator === '%'):
-      return remainder (firstNumber, secondNumber);
+
+      dividedNum = 10**numAfterDecimal;
+      result = remainder (firstNumber, secondNumber);
+      result = calculateFromInteger(result, dividedNum);
+      return result;
+
     case (operator === '!'):
+      firstNumber = firstNumber/(10**numAfterDecimal);
       return factorial (firstNumber);
+
     default:
       return null;
   }
+}
+
+function calculateToInteger(number, multiplyNum) {
+  return number *= multiplyNum;
+}
+
+function calculateFromInteger(result, dividedNum) {
+  return result /= dividedNum;
+}
+
+function afterDecimal(num) {
+  if (Number.isInteger(num)) return 0;
+  return num.toString().split('.')[1].length;
 }
 
 
@@ -112,15 +176,27 @@ operators.forEach((button) =>
   button.addEventListener('click', () => clickOperator(button.value))
 )
 
-result.addEventListener('click', evaluate)
+operatorsSolo.forEach((button) =>
+  button.addEventListener('click', () => clickSoloOperator(button.value))
+)
+
+result.addEventListener('click', evaluate);
+
+dot.addEventListener('click', appendDot);
 
 helpers.forEach((button) => 
   button.addEventListener('click', (e) => {
     if (e.target.value === "CE") clearDisplayC(display);
     if (e.target.value === "C") clearAll(display);
+    if (e.target.value === "Del") delLastNumber(display);
   })
 )
 
+
+function appendNumber(number) {
+  if (display.textContent === '0' || resetDisplay) clearDisplay(display);
+  display.textContent += number;
+}
 
 function clickOperator(operator) {
   if (selectOperator !== null) evaluate();
@@ -140,10 +216,23 @@ function evaluate() {
 }
 
 
-function appendNumber(number) {
-  if (display.textContent === '0' || resetDisplay) clearDisplay(display);
-  display.textContent += number;
+function clickSoloOperator(operator) {
+  firstNumber = display.textContent;
+  selectOperator = operator;
+  display.textContent = operate(firstNumber, selectOperator);
+  histories.textContent = `${firstNumber} ${selectOperator} =`;
+  selectOperator = null;
+  resetDisplay = true;
 }
+
+function appendDot() {
+  if (resetDisplay) clearDisplayC;
+  if (display.textContent === '') display.textContent = '0';
+  if (display.textContent.includes('.')) return;
+  display.textContent += '.';
+}
+
+
 
 
 function removeAllChild(parent) {
@@ -161,6 +250,10 @@ function clearDisplay(node) {
 function clearDisplayC(node) {
   node.textContent = '0';
   resetDisplay = false;
+}
+
+function delLastNumber(node) {
+  node.textContent = node.textContent.slice(0, -1);
 }
 
 
