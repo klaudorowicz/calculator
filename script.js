@@ -29,7 +29,7 @@ const divide = (first, ...args) => {
   let result = first;
   for (let arg of args) {
     if ( arg === 0 ) {alert("OMG, You mustn't do that");
-    return null;
+    return 0;
     }
     result /= arg;
   }
@@ -40,7 +40,10 @@ const divide = (first, ...args) => {
 const power = (base, ...exponents) => {
   let result = base;
   for (let exponent of exponents)  {
-    if (exponent == undefined) return alert("Write divisive");
+    if (exponent == undefined) {
+      alert("Write divisive");
+      return 0;
+    }
     result **= exponent;
   }
   return result;
@@ -49,8 +52,14 @@ const power = (base, ...exponents) => {
 //In testing
 const remainder = (divided, divisive) => {
   let result = 0;
-  if ( divisive === 0 ) return alert("OMG, You mustn't do that");
-  if (divisive == undefined) return alert("Write divisive");
+  if ( divisive === 0 ) {
+    alert("OMG, You mustn't do that"); 
+    return 0;
+  }
+  if (divisive == undefined) {
+    alert("Write divisive");
+    return 0;
+  }
   return result = divided % divisive;
 }
 
@@ -76,6 +85,7 @@ const result = document.querySelector('#result');
 const dot = document.querySelector('#dot');
 const display = document.querySelector('#display');
 const histories = document.querySelector('#histories');
+const sign = document.querySelector('#sign');
 let operator = 'operatorAdd';
 let rememberPreviousNumber = '';
 let selectOperator = null;
@@ -180,6 +190,8 @@ operatorsSolo.forEach((button) =>
   button.addEventListener('click', () => clickSoloOperator(button.value))
 )
 
+sign.addEventListener('click', () => singChange(display))
+
 result.addEventListener('click', evaluate);
 
 dot.addEventListener('click', appendDot);
@@ -233,15 +245,6 @@ function appendDot() {
 }
 
 
-
-
-function removeAllChild(parent) {
-  while (parent.firstChild) {
-    parent.removeChild(parent.firstChild);
-  };
-};
-
-
 function clearDisplay(node) {
   node.textContent = '';
   resetDisplay = false;
@@ -253,7 +256,24 @@ function clearDisplayC(node) {
 }
 
 function delLastNumber(node) {
+
+  if (node.textContent.includes('-') 
+    && node.textContent.length === 2) 
+      return node.textContent = '0';
+
+  if (node.textContent.length === 1) return node.textContent = '0';
   node.textContent = node.textContent.slice(0, -1);
+}
+
+function singChange(node) {
+
+  if (node.textContent === '0') return;
+  let newStr = node.textContent.split('');
+
+  node.textContent.includes('-') ? newStr.splice(0, 1) : newStr.splice(0, 0, '-');
+
+  newStr = newStr.join('');
+  node.textContent = newStr;
 }
 
 
@@ -266,5 +286,16 @@ function clearAll(parent) {
   resetDisplay = false;
 }
 
+window.addEventListener('keydown', handleKeyboardInput)
 
-
+function handleKeyboardInput(e) {
+  console.log(e.key);
+  if (e.key >= 0 && e.key <= 9) appendNumber(e.key);
+  if (e.key === '.' || e.key === ',') appendDot();
+  if (e.key === '=' || e.key === 'Enter') evaluate();
+  if ( /[+*%\/\-]/.test(e.key) ) clickOperator(e.key);
+  if ( /!/.test(e.key) ) clickSoloOperator(e.key);
+  if (e.key === 'Backspace') delLastNumber(display);
+  if (e.key === 'Escape') clearAll(display);
+  if (e.key === 'Delete') clearDisplayC(display);
+}
