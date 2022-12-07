@@ -75,9 +75,44 @@ const factorial = (number) => {
   }
 }
 
+const sqrt2 = (number) => {
+  let result = number;
+  if (number < 0) {
+    alert("Sqrt negative number is not supported"); 
+    return result;
+  }
+  return result = Math.sqrt(number);
+}
+
+const inverse = (number) => {
+  let result = number;
+  return result = 1/result;
+}
+
+const log10 = (number) => {
+  let result = number;
+  if (number < 0) {
+    alert("Negative number is not supported"); 
+    return 0;
+  }
+  return result = Math.log10(number);
+}
+
+const ln = (number) => {
+  let result = number;
+  if (number < 0) {
+    alert("Negative number is not supported"); 
+    return 0;
+  }
+  return result = Math.log(number);
+}
+
+
+
 // Statement
 const buttons = document.querySelectorAll('button');
 const numbers = document.querySelectorAll('#number');
+const specialNumbers = document.querySelectorAll('#specialNumber');
 const operators = document.querySelectorAll('#operator');
 const operatorsSolo = document.querySelectorAll('#operatorSolo');
 const helpers = document.querySelectorAll('#helper');
@@ -91,7 +126,6 @@ let rememberPreviousNumber = '';
 let selectOperator = null;
 let resetDisplay = false;
 let numAfterDecimal = 0;
-let resultOfOperation = 0;
 
 
 function operate(firstNumber, operator, ...secondNumber) {
@@ -158,6 +192,22 @@ function operate(firstNumber, operator, ...secondNumber) {
       firstNumber = firstNumber/(10**numAfterDecimal);
       return factorial (firstNumber);
 
+    case (operator === '√'):
+      firstNumber = firstNumber/(10**numAfterDecimal);
+      return sqrt2 (firstNumber);
+
+    case (operator === '1/'):
+      firstNumber = firstNumber/(10**numAfterDecimal);
+      return inverse (firstNumber);
+
+    case (operator === 'log10'):
+      firstNumber = firstNumber/(10**numAfterDecimal);
+      return log10 (firstNumber);
+
+    case (operator === 'ln'):
+      firstNumber = firstNumber/(10**numAfterDecimal);
+      return ln (firstNumber);
+
     default:
       return null;
   }
@@ -182,6 +232,10 @@ function afterDecimal(num) {
 
 numbers.forEach((button) => 
   button.addEventListener('click', () => appendNumber(button.value))
+)
+
+specialNumbers.forEach((button) => 
+  button.addEventListener('click', () => appendSpecialNumber(button.value))
 )
 
 operators.forEach((button) =>
@@ -212,11 +266,15 @@ function appendNumber(number) {
   display.textContent += number;
 }
 
+function appendSpecialNumber(number) {
+  clearDisplay(display)
+  if (number === 'pi') display.textContent += Math.PI;
+  if (number === 'e') display.textContent += Math.E;
+}
+
 function clickOperator(operator) {
   if (selectOperator !== null) evaluate();
   firstNumber = display.textContent;
-  if (resultOfOperation !==0) firstNumber = resultOfOperation;
-  resultOfOperation = 0;
   selectOperator = operator;
 
   let firstNumberDisplay = expo(firstNumber, 5, 11);
@@ -228,14 +286,14 @@ function evaluate() {
   if (selectOperator === null || resetDisplay) return;
   secondNumber = display.textContent;
 
-  resultOfOperation = operate(firstNumber, selectOperator, secondNumber);
-  display.textContent = resultOfOperation;
+  display.textContent  = operate(firstNumber, selectOperator, secondNumber);
   display.textContent = expo(display.textContent, 13, 15);
 
   let firstNumberDisplay = expo(firstNumber, 5, 11);
   let secondNumberDisplay = expo(secondNumber, 5, 11);
   histories.textContent = 
     `${firstNumberDisplay} ${selectOperator} ${secondNumberDisplay} =`
+
   selectOperator = null;
 }
 
@@ -250,8 +308,13 @@ function clickSoloOperator(operator) {
   firstNumber = display.textContent;
   selectOperator = operator;
   display.textContent = operate(firstNumber, selectOperator);
-  firstNumber = expo(firstNumber, 10);
-  histories.textContent = `${firstNumber} ${selectOperator} =`;
+
+  display.textContent = financial(display.textContent);
+
+  let firstNumberDisplay = expo(firstNumber, 10, 15);
+
+  histories.textContent = `${selectOperator} ${firstNumberDisplay}  =`;
+  
   selectOperator = null;
   resetDisplay = true;
 }
@@ -261,6 +324,11 @@ function appendDot() {
   if (display.textContent === '') display.textContent = '0';
   if (display.textContent.includes('.')) return;
   display.textContent += '.';
+}
+
+function financial(number) {
+  number = Number.parseFloat(number).toFixed(15);
+  return parseFloat(number);
 }
 
 
