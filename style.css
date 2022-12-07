@@ -43,7 +43,7 @@ i {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(6px 6px 3px #a8a8a8);
-  /* user-select: none; */
+  user-select: none;
 }
 
 
@@ -60,19 +60,19 @@ i {
   justify-content: center;
   align-items: flex-end;
   padding: 10px;
-  width: 280px;
+  width: 340px;
   height: 72px;
   margin-bottom: 10px;
   background-color: rgb(73, 184, 184);
   border-radius: 3px;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.377);
+  box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.377);
+  overflow: hidden;
 }
 
 .display div {
   font-family: 'Pixel Technology';
   font-size: 26px;
-  /* overflow-x: auto; */
-  max-width: 260px;
+  max-width: 320px;
   float: right;
 }
 
@@ -82,30 +82,27 @@ i {
 
 .buttons {
   display: grid;
-  grid-template-columns: repeat(4, 65px);
+  grid-template-columns: repeat(5, 65px);
   grid-template-rows: repeat(6, 65px);
   gap: 3px;
 }
 
 #result {
   /* grid-area: 5 / 4 / 7 / 5; */
-  grid-column: 4 / 5;
+  grid-column: 5 / 6;
   grid-row: 5 / 7; 
 }
 
 button {
   font-size: 24px;
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.082);
+  user-select: none;
+  cursor: pointer;
 }
 
-
-
-
-
-
-
-
-
+button:active {
+  box-shadow:inset 2px 2px 3px rgba(0, 0, 0, 0.233);
+}
 
 
 .footer {

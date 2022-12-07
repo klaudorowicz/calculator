@@ -91,6 +91,7 @@ let rememberPreviousNumber = '';
 let selectOperator = null;
 let resetDisplay = false;
 let numAfterDecimal = 0;
+let resultOfOperation = 0;
 
 
 function operate(firstNumber, operator, ...secondNumber) {
@@ -107,8 +108,6 @@ function operate(firstNumber, operator, ...secondNumber) {
   let multiplyNum = 10**numAfterDecimal;
   firstNumber = calculateToInteger(firstNumber, multiplyNum);
   secondNumber = calculateToInteger(secondNumber, multiplyNum);
-  console.log(firstNumber);
-  console.log(secondNumber);
 
 
   let result = 0;
@@ -174,7 +173,10 @@ function calculateFromInteger(result, dividedNum) {
 
 function afterDecimal(num) {
   if (Number.isInteger(num)) return 0;
-  return num.toString().split('.')[1].length;
+  let result = num.toString().split('.')[1];
+  if (result === undefined) return result = 0;
+  result = result.length;
+  return result;
 }
 
 
@@ -213,25 +215,42 @@ function appendNumber(number) {
 function clickOperator(operator) {
   if (selectOperator !== null) evaluate();
   firstNumber = display.textContent;
+  if (resultOfOperation !==0) firstNumber = resultOfOperation;
+  resultOfOperation = 0;
   selectOperator = operator;
-  histories.textContent = `${firstNumber} ${selectOperator}`;
+
+  let firstNumberDisplay = expo(firstNumber, 5, 11);
+  histories.textContent = `${firstNumberDisplay} ${selectOperator}`;
   resetDisplay = true;
 }
-
 
 function evaluate() {
   if (selectOperator === null || resetDisplay) return;
   secondNumber = display.textContent;
-  display.textContent = operate(firstNumber, selectOperator, secondNumber);
-  histories.textContent = `${firstNumber} ${selectOperator} ${secondNumber} =`
+
+  resultOfOperation = operate(firstNumber, selectOperator, secondNumber);
+  display.textContent = resultOfOperation;
+  display.textContent = expo(display.textContent, 13, 15);
+
+  let firstNumberDisplay = expo(firstNumber, 5, 11);
+  let secondNumberDisplay = expo(secondNumber, 5, 11);
+  histories.textContent = 
+    `${firstNumberDisplay} ${selectOperator} ${secondNumberDisplay} =`
   selectOperator = null;
 }
 
+
+function expo(number, expo, max) {
+  let control = number.toString().length;
+  if (control  > max) return Number.parseFloat(number).toExponential(expo);
+  return number;
+}
 
 function clickSoloOperator(operator) {
   firstNumber = display.textContent;
   selectOperator = operator;
   display.textContent = operate(firstNumber, selectOperator);
+  firstNumber = expo(firstNumber, 10);
   histories.textContent = `${firstNumber} ${selectOperator} =`;
   selectOperator = null;
   resetDisplay = true;
@@ -289,7 +308,6 @@ function clearAll(parent) {
 window.addEventListener('keydown', handleKeyboardInput)
 
 function handleKeyboardInput(e) {
-  console.log(e.key);
   if (e.key >= 0 && e.key <= 9) appendNumber(e.key);
   if (e.key === '.' || e.key === ',') appendDot();
   if (e.key === '=' || e.key === 'Enter') evaluate();
